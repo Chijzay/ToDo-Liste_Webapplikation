@@ -1,4 +1,4 @@
-# Fullstack Entwicklung einer ToDo-Liste als Webapplikation
+# Fullstack Webentwicklung einer ToDo-Liste als Webapplikation
 
 Eine vollständige, moderne Fullstack-Webapplikation zur Verwaltung persönlicher ToDos mit Benutzerkonten, Deadlines, Kategorien, Sortierung und Pagination.
 
