@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-const API_BASE = 'http://localhost:5000/api/auth';
+const API_BASE =
+  import.meta.env.VITE_AUTH_API_URL || 'http://localhost:5000/api/auth';
 
 function AuthScreen({ onAuthSuccess }) {
   const [mode, setMode] = useState('login'); // 'login' oder 'register'
