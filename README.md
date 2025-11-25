@@ -1,10 +1,6 @@
 # Fullstack Webentwicklung einer ToDo-Liste
 
-Eine vollständige, moderne Fullstack-Webapplikation zur Verwaltung persönlicher ToDos mit Benutzerkonten, Deadlines, Kategorien, Sortierung und Pagination.
-
-Die Anwendung unterstützt Registrierung, Login, persönliche Aufgabenverwaltung und bietet eine klare, responsive Oberfläche.
-
----
+Eine vollständige, moderne Fullstack-Webapplikation zur Verwaltung persönlicher ToDos mit Benutzerkonten, Deadlines, Kategorien, Sortierung und Pagination. Die Anwendung unterstützt Registrierung, Login, persönliche Aufgabenverwaltung und bietet eine klare, responsive Oberfläche.
 
 ## Funktionen
 
@@ -41,8 +37,6 @@ Die Anwendung unterstützt Registrierung, Login, persönliche Aufgabenverwaltung
 * Keine Scroll-Liste – Navigation über "Weiter"/"Zurück"
 * Modernes, responsives UI mit Tailwind CSS
 
----
-
 ## Technologiestack
 
 ### Frontend
@@ -70,8 +64,6 @@ Die Anwendung unterstützt Registrierung, Login, persönliche Aufgabenverwaltung
   * `User`: Benutzername, E-Mail, Passwort (gehasht)
   * `Todo`: Text, Status, Deadline, Kategorie, User-Referenz
 
----
-
 ## Architekturübersicht
 
 Die Anwendung ist eine vollständige **Fullstack Client-Server-Webapplikation**.
@@ -86,13 +78,10 @@ Die Anwendung ist eine vollständige **Fullstack Client-Server-Webapplikation**.
            |  Mongoose
            v
 [ Datenbank (MongoDB / Atlas) ]
-```
 
 * **Client-Schicht:** React SPA, kommuniziert per JSON mit dem Backend
 * **Backend-Schicht:** Express API, Authentifizierung, Business-Logik
 * **Datenhaltung:** MongoDB via Mongoose
-
----
 
 ## Projektstruktur
 
@@ -115,8 +104,6 @@ Die Anwendung ist eine vollständige **Fullstack Client-Server-Webapplikation**.
     ├── postcss.config.js
     └── src/
 ```
-
----
 
 ## Projekt lokal starten
 
@@ -151,8 +138,6 @@ npm run dev
 
 Danach Browser öffnen: `http://localhost:5173`
 
----
-
 ## Deployment
 
 ### Backend auf Render
@@ -174,4 +159,3 @@ Danach Browser öffnen: `http://localhost:5173`
 5. `VITE_API_URL` auf Backend-URL setzen
 6. Deploy
 
----
