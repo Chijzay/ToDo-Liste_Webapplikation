@@ -4,7 +4,7 @@ import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 import AuthScreen from './components/AuthScreen';
 
-const API_URL = 'http://localhost:5000/api/todos';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/todos';
 
 const FILTERS = {
   ALL: 'ALL',
