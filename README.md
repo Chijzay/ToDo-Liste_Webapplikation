@@ -164,7 +164,7 @@ Die Anwendung folgt einer klassischen und vollständigen Fullstack `Client-Serve
 │   ├── package.json          # Projektkonfiguration und Abhängigkeiten
 │   └── server.js             # Haupteinstiegspunkt des Backends.
 │
-└── frontend/
+├── frontend/
 │   ├── src/
 │   │   ├── components/       # React Kompinenten
 │   │   ├── App.jsx           # Hauptkomponente der Webappplikation
