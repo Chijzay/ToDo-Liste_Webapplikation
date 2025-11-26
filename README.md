@@ -1,3 +1,15 @@
+<svg width="180" height="60" viewBox="0 0 180 60" xmlns="http://www.w3.org/2000/svg">
+  <rect width="180" height="60" rx="10" fill="#1e40af"/>
+  <text x="30" y="38" font-family="Verdana" font-size="26" fill="white" font-weight="600">
+    ToDo App
+  </text>
+
+  <!-- Checkmark Icon -->
+  <circle cx="140" cy="30" r="20" fill="#ffffff22" stroke="#ffffff" stroke-width="2"/>
+  <path d="M130 30 L138 37 L150 23" stroke="white" stroke-width="3" fill="none" stroke-linecap="round"/>
+</svg>
+
+
 # Fullstack Webentwicklung einer ToDo-Liste
 
 Eine vollständige, moderne Fullstack-Webapplikation zur Verwaltung persönlicher ToDos mit Benutzerkonten, Deadlines, Kategorien, Sortierung und Pagination. Die Anwendung unterstützt Registrierung, Login, persönliche Aufgabenverwaltung und bietet eine klare, responsive Oberfläche.
