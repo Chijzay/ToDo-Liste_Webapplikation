@@ -4,7 +4,8 @@ import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 import AuthScreen from './components/AuthScreen';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/todos';
+const API_URL =
+  import.meta.env.VITE_API_URL || 'http://localhost:5000/api/todos';
 
 const FILTERS = {
   ALL: 'ALL',
@@ -25,11 +26,12 @@ const SORTS = {
   CATEGORY_ASC: 'CATEGORY_ASC',
 };
 
-const PAGE_SIZE = 8; // genau 8 Einträge pro Seite
+const PAGE_SIZE = 8;
 
 function App() {
   const [todos, setTodos] = useState([]);
   const [filter, setFilter] = useState(FILTERS.ALL);
+  const [categoryFilter, setCategoryFilter] = useState('ALL'); // 👈 NEU
   const [sortBy, setSortBy] = useState(SORTS.CREATED_DESC);
   const [loading, setLoading] = useState(true);
 
@@ -38,6 +40,27 @@ function App() {
   const [authChecked, setAuthChecked] = useState(false);
 
   const [page, setPage] = useState(1);
+
+  const [darkMode, setDarkMode] = useState(false); // 👈 Dark Mode
+
+  // Theme aus localStorage laden
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      setDarkMode(true);
+    }
+  }, []);
+
+  // Dark Mode Klasse auf <html> setzen
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [darkMode]);
 
   // Token aus localStorage laden
   useEffect(() => {
@@ -131,19 +154,32 @@ function App() {
       const due = todo.dueDate ? new Date(todo.dueDate) : null;
       const refDate = due || created;
 
+      // Status / Zeit-Filter
       switch (filter) {
         case FILTERS.OPEN:
-          return !todo.done;
+          if (todo.done) return false;
+          break;
         case FILTERS.DONE:
-          return todo.done;
+          if (!todo.done) return false;
+          break;
         case FILTERS.TODAY:
-          return isSameDay(refDate, now);
+          if (!isSameDay(refDate, now)) return false;
+          break;
         case FILTERS.THIS_WEEK:
-          return isSameWeek(refDate, now);
+          if (!isSameWeek(refDate, now)) return false;
+          break;
         case FILTERS.ALL:
         default:
-          return true;
+          break;
       }
+
+      // Kategorien-Filter zusätzlich
+      if (categoryFilter !== 'ALL') {
+        const cat = (todo.category || '').trim();
+        if (cat !== categoryFilter) return false;
+      }
+
+      return true;
     });
   };
 
@@ -193,6 +229,15 @@ function App() {
   const filtered = applyFilter(todos);
   const sorted = applySort(filtered);
 
+  // alle vorhandenen Kategorien (für Dropdown)
+  const allCategories = Array.from(
+    new Set(
+      todos
+        .map((t) => (t.category || '').trim())
+        .filter((cat) => cat && cat.length > 0)
+    )
+  );
+
   const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
   const startIndex = (currentPage - 1) * PAGE_SIZE;
@@ -208,24 +253,32 @@ function App() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100">
         Loading...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center">
-      <div className="bg-white shadow-lg rounded-2xl p-6 w-full max-w-3xl space-y-4">
+    <div className="min-h-screen bg-slate-100 dark:bg-slate-900 flex items-center justify-center">
+      <div className="bg-white dark:bg-slate-800 shadow-lg rounded-2xl p-6 w-full max-w-3xl space-y-4 border border-slate-200 dark:border-slate-700">
         <div className="flex justify-between items-center">
-          <h1 className="text-2xl font-bold">ToDo Liste</h1>
-          <div className="text-sm flex items-center gap-3">
-            <span className="text-gray-600">
+          <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
+            ToDo Liste
+          </h1>
+          <div className="flex items-center gap-3 text-sm">
+            <span className="text-gray-600 dark:text-gray-300">
               {user.username || user.email}
             </span>
             <button
+              onClick={() => setDarkMode((prev) => !prev)}
+              className="px-3 py-1 rounded-lg border text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700"
+            >
+              {darkMode ? 'Light Mode' : 'Dark Mode'}
+            </button>
+            <button
               onClick={handleLogout}
-              className="px-3 py-1 rounded-lg border text-gray-700 hover:bg-slate-100"
+              className="px-3 py-1 rounded-lg border text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700"
             >
               Logout
             </button>
@@ -247,7 +300,7 @@ function App() {
                 className={`px-3 py-1 rounded-full border ${
                   filter === value
                     ? 'bg-blue-500 text-white border-blue-500'
-                    : 'bg-white text-gray-700 border-gray-300'
+                    : 'bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-600'
                 }`}
               >
                 {value === FILTERS.ALL && 'Alle'}
@@ -259,46 +312,69 @@ function App() {
             ))}
           </div>
 
-          <div className="flex items-center gap-2">
-            <span className="text-gray-600">Sortieren nach:</span>
-            <select
-              className="border rounded-lg px-2 py-1"
-              value={sortBy}
-              onChange={(e) => {
-                setSortBy(e.target.value);
-                setPage(1);
-              }}
-            >
-              <option value={SORTS.CREATED_DESC}>
-                Erstellt (neu → alt)
-              </option>
-              <option value={SORTS.CREATED_ASC}>
-                Erstellt (alt → neu)
-              </option>
-              <option value={SORTS.DUE_ASC}>
-                Deadline (früh → spät)
-              </option>
-              <option value={SORTS.DUE_DESC}>
-                Deadline (spät → früh)
-              </option>
-              <option value={SORTS.STATUS}>
-                Status (offen → erledigt)
-              </option>
-              <option value={SORTS.TEXT_ASC}>
-                Text (A → Z)
-              </option>
-              <option value={SORTS.TEXT_DESC}>
-                Text (Z → A)
-              </option>
-              <option value={SORTS.CATEGORY_ASC}>
-                Kategorie (A → Z)
-              </option>
-            </select>
+          <div className="flex flex-col items-end gap-2">
+            {/* Kategorie-Filter */}
+            <div className="flex items-center gap-2">
+              <span className="text-gray-600 dark:text-gray-300">
+                Kategorie:
+              </span>
+              <select
+                className="border rounded-lg px-2 py-1 bg-white dark:bg-slate-700 text-gray-800 dark:text-gray-100 border-gray-300 dark:border-slate-600"
+                value={categoryFilter}
+                onChange={(e) => {
+                  setCategoryFilter(e.target.value);
+                  setPage(1);
+                }}
+              >
+                <option value="ALL">Alle</option>
+                {allCategories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Sortierung */}
+            <div className="flex items-center gap-2">
+              <span className="text-gray-600 dark:text-gray-300">
+                Sortieren nach:
+              </span>
+              <select
+                className="border rounded-lg px-2 py-1 bg-white dark:bg-slate-700 text-gray-800 dark:text-gray-100 border-gray-300 dark:border-slate-600"
+                value={sortBy}
+                onChange={(e) => {
+                  setSortBy(e.target.value);
+                  setPage(1);
+                }}
+              >
+                <option value={SORTS.CREATED_DESC}>
+                  Erstellt (neu → alt)
+                </option>
+                <option value={SORTS.CREATED_ASC}>
+                  Erstellt (alt → neu)
+                </option>
+                <option value={SORTS.DUE_ASC}>
+                  Deadline (früh → spät)
+                </option>
+                <option value={SORTS.DUE_DESC}>
+                  Deadline (spät → früh)
+                </option>
+                <option value={SORTS.STATUS}>
+                  Status (offen → erledigt)
+                </option>
+                <option value={SORTS.TEXT_ASC}>Text (A → Z)</option>
+                <option value={SORTS.TEXT_DESC}>Text (Z → A)</option>
+                <option value={SORTS.CATEGORY_ASC}>
+                  Kategorie (A → Z)
+                </option>
+              </select>
+            </div>
           </div>
         </div>
 
-        {/* Liste – kein Scrollen mehr, nur 8 Einträge */}
-        <div className="border rounded-xl p-3">
+        {/* Liste */}
+        <div className="border rounded-xl p-3 border-slate-200 dark:border-slate-700">
           <TodoList
             todos={pagedTodos}
             onDelete={deleteTodo}
@@ -308,7 +384,7 @@ function App() {
         </div>
 
         {/* Pagination */}
-        <div className="flex justify-between items-center text-sm text-gray-600">
+        <div className="flex justify-between items-center text-sm text-gray-600 dark:text-gray-300">
           <span>
             Seite {currentPage} von {totalPages} ({sorted.length} Einträge)
           </span>
@@ -316,10 +392,10 @@ function App() {
             <button
               disabled={currentPage === 1}
               onClick={() => setPage((p) => Math.max(1, p - 1))}
-              className={`px-3 py-1 rounded-lg border ${
+              className={`px-3 py-1 rounded-lg border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-200 ${
                 currentPage === 1
                   ? 'opacity-40 cursor-not-allowed'
-                  : 'hover:bg-slate-100'
+                  : 'hover:bg-slate-100 dark:hover:bg-slate-700'
               }`}
             >
               Zurück
@@ -327,10 +403,10 @@ function App() {
             <button
               disabled={currentPage === totalPages}
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              className={`px-3 py-1 rounded-lg border ${
+              className={`px-3 py-1 rounded-lg border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-200 ${
                 currentPage === totalPages
                   ? 'opacity-40 cursor-not-allowed'
-                  : 'hover:bg-slate-100'
+                  : 'hover:bg-slate-100 dark:hover:bg-slate-700'
               }`}
             >
               Weiter
