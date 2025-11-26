@@ -178,10 +178,20 @@ Die Anwendung folgt einer klassischen und vollständigen Fullstack `Client-Serve
 \   └── vite.config.js        # Konfiguration für Vite
 ```
 
+## Qualität und Sicherheit
+
+* Passwort-Hashing mit `bcrypt`
+* Token-basierte Authentifizierung
+* Geschützte Endpunkte (`JWT`-Pflicht)
+* Cross-Origin-Schutz via `CORS`
+* Eingabevalidierung im Backend
+* Fehlerbehandlung und Response-Standardisierung
+* Keine sensiblen Daten im Client gespeichert
+
 
 ## Deployment und Hosting
 
-*Render (Backend):
+* Render (Backend):
   - Hosted auf Render.com
   - Node Server über `npm start`
   - Health Checks
