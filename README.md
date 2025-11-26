@@ -82,6 +82,7 @@ Die Anwendung ist eine vollständige **Fullstack Client-Server-Webapplikation**.
 * **Client-Schicht:** React SPA, kommuniziert per JSON mit dem Backend
 * **Backend-Schicht:** Express API, Authentifizierung, Business-Logik
 * **Datenhaltung:** MongoDB via Mongoose
+```
 
 ## Projektstruktur
 
@@ -105,38 +106,6 @@ Die Anwendung ist eine vollständige **Fullstack Client-Server-Webapplikation**.
 \   └── src/
 ```
 
-## Projekt lokal starten
-
-### 1. Backend
-
-```bash
-cd backend
-npm install
-```
-
-`.env` Datei erstellen:
-
-```env
-MONGODB_URI=mongodb://localhost:27017/todo_app
-PORT=5000
-JWT_SECRET=geheimes-passwort
-```
-
-Backend starten:
-
-```bash
-npm run dev
-```
-
-### 2. Frontend
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-Danach Browser öffnen: `http://localhost:5173`
 
 ## Deployment
 
