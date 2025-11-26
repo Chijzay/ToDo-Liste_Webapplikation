@@ -8,11 +8,11 @@ const API_URL =
   import.meta.env.VITE_API_URL || 'http://localhost:5000/api/todos';
 
 const FILTERS = {
-  ALL: 'ALL',
   OPEN: 'OPEN',
-  DONE: 'DONE',
   TODAY: 'TODAY',
   THIS_WEEK: 'THIS_WEEK',
+  DONE: 'DONE',
+  ALL: 'ALL',
 };
 
 const SORTS = {
