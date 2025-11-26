@@ -174,7 +174,7 @@ Die Anwendung folgt einer klassischen und vollständigen Fullstack `Client-Serve
 │   ├── package.json          # Projektkonfiguration und Abhängigkeiten
 │   ├── postcss.config.js     # Post-CSS Konfiguration für Tailwind
 │   ├── tailwind.config.js    # Konfiguration für Tailwind
-\   └── vite.config.js        # Konfiguration für Vite
+└   └── vite.config.js        # Konfiguration für Vite
 ```
 
 ## Qualität und Sicherheit
