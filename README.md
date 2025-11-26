@@ -1,10 +1,22 @@
 <p align="center">
-  <img src="./logo.svg" width="250" />
+  <img src="./logo.svg" width="300" />
 </p>
 
 # Fullstack Webentwicklung einer ToDo-Liste
 
 Eine moderne, vollständige Fullstack-Webapplikation zur Verwaltung persönlicher Aufgaben. Das System umfasst Benutzerkonten, Deadlines, Kategorien, Filter- und Sortierfunktionen, Pagination, sowie Light- und Dark-Mode. Alle Daten werden benutzerspezifisch gespeichert und sind jederzeit online abrufbar und bietet eine klare, responsive Oberfläche.
+
+
+## Live-Demo
+
+Die Webapplikation ist unter folgendem Link erreichbar:
+
+```
+https://todo-liste-webapp.netlify.app/
+```
+
+**Hinweis:** Der erste Aufruf kann einige Sekunden dauern, da Render das Backend zunächst _aufweckt_.
+
 
 ## Funktionen
 
@@ -171,17 +183,6 @@ Die Anwendung folgt einer klassischen und vollständige Fullstack Client-Server-
 * CI/CD:
   - Jedes GitHub-Push löst auto-Deploy auf Render und Netlify aus Zero-Downtime Deployments
   - Keine lokale Umgebung für Betrieb notwendig und zu 100% Cloud
-
-
-## Live-Demo
-
-Die Webapplikation ist unter folgendem Link erreichbar:
-
-```
-https://todo-liste-webapp.netlify.app/
-```
-
-**Hinweis:** Der erste Aufruf kann einige Sekunden dauern, da Render das Backend zunächst _aufweckt_.
 
 
 ## Lizenz
