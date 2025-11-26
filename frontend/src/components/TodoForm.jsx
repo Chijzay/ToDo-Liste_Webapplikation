@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const PRESET_CATEGORIES = ['Arbeit', 'Haushalt', 'Freizeit', 'Einkaufen'];
+const PRESET_CATEGORIES = ['Arbeit', 'Haushalt', 'Einkaufen', 'Erledigung'];
 
 const getTodayString = () => new Date().toISOString().slice(0, 10);
 
