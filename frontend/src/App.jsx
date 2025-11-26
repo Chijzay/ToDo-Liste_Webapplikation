@@ -31,7 +31,7 @@ const PAGE_SIZE = 8;
 function App() {
   const [todos, setTodos] = useState([]);
   const [filter, setFilter] = useState(FILTERS.ALL);
-  const [categoryFilter, setCategoryFilter] = useState('ALL'); // 👈 NEU
+  const [categoryFilter, setCategoryFilter] = useState('ALL');
   const [sortBy, setSortBy] = useState(SORTS.CREATED_DESC);
   const [loading, setLoading] = useState(true);
 
@@ -41,7 +41,7 @@ function App() {
 
   const [page, setPage] = useState(1);
 
-  const [darkMode, setDarkMode] = useState(false); // 👈 Dark Mode
+  const [darkMode, setDarkMode] = useState(false);
 
   // Theme aus localStorage laden
   useEffect(() => {
@@ -61,6 +61,47 @@ function App() {
       localStorage.setItem('theme', 'light');
     }
   }, [darkMode]);
+
+  // UI-Filter- und Sortierungszustand aus localStorage laden
+  useEffect(() => {
+    const savedFilter = localStorage.getItem('todo_filter');
+    const savedCategoryFilter = localStorage.getItem('todo_category_filter');
+    const savedSortBy = localStorage.getItem('todo_sortBy');
+    const savedPage = localStorage.getItem('todo_page');
+
+    if (savedFilter && Object.values(FILTERS).includes(savedFilter)) {
+      setFilter(savedFilter);
+    }
+    if (savedCategoryFilter) {
+      setCategoryFilter(savedCategoryFilter);
+    }
+    if (savedSortBy && Object.values(SORTS).includes(savedSortBy)) {
+      setSortBy(savedSortBy);
+    }
+    if (savedPage) {
+      const p = Number(savedPage);
+      if (!Number.isNaN(p) && p >= 1) {
+        setPage(p);
+      }
+    }
+  }, []);
+
+  // UI-Status in localStorage schreiben
+  useEffect(() => {
+    localStorage.setItem('todo_filter', filter);
+  }, [filter]);
+
+  useEffect(() => {
+    localStorage.setItem('todo_category_filter', categoryFilter);
+  }, [categoryFilter]);
+
+  useEffect(() => {
+    localStorage.setItem('todo_sortBy', sortBy);
+  }, [sortBy]);
+
+  useEffect(() => {
+    localStorage.setItem('todo_page', String(page));
+  }, [page]);
 
   // Token aus localStorage laden
   useEffect(() => {
@@ -107,6 +148,7 @@ function App() {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     delete axios.defaults.headers.common['Authorization'];
+    // Filter/Sortierung bleiben bewusst erhalten
   };
 
   const addTodo = async ({ text, dueDate, category }) => {
@@ -154,7 +196,7 @@ function App() {
       const due = todo.dueDate ? new Date(todo.dueDate) : null;
       const refDate = due || created;
 
-      // Status / Zeit-Filter
+      // Status/Zeit-Filter
       switch (filter) {
         case FILTERS.OPEN:
           if (todo.done) return false;
@@ -173,7 +215,7 @@ function App() {
           break;
       }
 
-      // Kategorien-Filter zusätzlich
+      // Kategorie-Filter zusätzlich
       if (categoryFilter !== 'ALL') {
         const cat = (todo.category || '').trim();
         if (cat !== categoryFilter) return false;
@@ -229,7 +271,7 @@ function App() {
   const filtered = applyFilter(todos);
   const sorted = applySort(filtered);
 
-  // alle vorhandenen Kategorien (für Dropdown)
+  // Alle vorhandenen Kategorien für Dropdown
   const allCategories = Array.from(
     new Set(
       todos
