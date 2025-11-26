@@ -2,7 +2,7 @@
   <img src="./logo.svg" width="250" />
 </p>
 
-# Fullstack Webentwicklung einer ToDo-Liste als Webapplikation
+# Fullstack Webentwicklung einer ToDo-Liste
 
 Eine moderne, vollständige Fullstack-Webapplikation zur Verwaltung persönlicher Aufgaben. Das System umfasst Benutzerkonten, Deadlines, Kategorien, Filter- und Sortierfunktionen, Pagination, sowie Light- und Dark-Mode. Alle Daten werden benutzerspezifisch gespeichert und sind jederzeit online abrufbar und bietet eine klare, responsive Oberfläche.
 
