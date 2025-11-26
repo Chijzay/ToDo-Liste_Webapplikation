@@ -141,7 +141,6 @@ Die Anwendung folgt einer klassischen und vollständigen Fullstack `Client-Serve
 │   MongoDB Atlas Cluster  │
 │ - persistent storage     │
 └──────────────────────────┘
-
 ```
 
 * `Frontend:` React SPA kommuniziert ausschließlich über REST-API
@@ -194,7 +193,6 @@ Die Anwendung folgt einer klassischen und vollständigen Fullstack `Client-Serve
 * Render (Backend):
   - Hosted auf Render.com
   - Node Server über `npm start`
-  - Health Checks
   - Automatisches Deployment bei jedem GitHub-Push
   - Environment Variables:
     - `MONGODB_URI`
