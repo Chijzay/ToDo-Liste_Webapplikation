@@ -17,6 +17,19 @@ https://todo-liste-webapp.netlify.app/
 
 _Hinweis:_ Das Backend (Render) benötigt nach längerer Inaktivität einige Sekunden zum Aufwachen.
 
+
+## Projektbeschreibung
+
+Diese Webapplikation demonstriert eine vollständig implementierte, moderne Fullstack-Architektur und verbindet Software-Engineering-Best-Practices mit einer nutzerfreundlichen UI. Sie dient als selbst initiiertes Portfolio-Projekt zur Demonstration moderner Fullstack-Entwicklung sowie softwaretechnischer Entscheidungsprozesse und dient als realistische Grundlage für produktionsnahe Webentwicklung. Die Anwendung ermöglicht:
+
+* Benutzerregistrierung und Login (JWT)
+* Verwaltung persönlicher Aufgaben
+* Deadlines und Kategorien
+* Vollständige Filter- und Sortieroptionen
+* Light und Dark Mode (persistiert)
+* Pagination (keine Scroll-Listen)
+* Sichere und skalierbare API-Struktur
+
 ## Funktionen
 
 ### Benutzerverwaltung
@@ -191,4 +204,4 @@ Die Anwendung folgt einer klassischen und vollständigen Fullstack `Client-Serve
 
 ## Lizenz
 
-Die Nutzung der Anwendung ist zu Demonstrations- und Lernzwecken erlaubt. Die kommerzielle Nutzung, Weitergabe, Vervielfältigung oder Verbreitung ist untersagt. Siehe LICENSE für Details.
+Die Nutzung der Anwendung ist zu Demonstrations- und Lernzwecken erlaubt. Die kommerzielle Nutzung, Weitergabe, Vervielfältigung oder Verbreitung ist untersagt. Siehe `LICENSE` für Details.
