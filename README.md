@@ -4,7 +4,7 @@
 
 # Fullstack Webentwicklung einer ToDo-Liste als Webapplikation
 
-Eine moderne, vollständige Fullstack-Webapplikation zur Verwaltung persönlicher Aufgaben. Das System umfasst Benutzerkonten, Deadlines, Kategorien, Filter- und Sortierfunktionen, Pagination, sowie Light-/Dark-Mode. Alle Daten werden benutzerspezifisch gespeichert und sind jederzeit online abrufbar und bietet eine klare, responsive Oberfläche.
+Eine moderne, vollständige Fullstack-Webapplikation zur Verwaltung persönlicher Aufgaben. Das System umfasst Benutzerkonten, Deadlines, Kategorien, Filter- und Sortierfunktionen, Pagination, sowie Light- und Dark-Mode. Alle Daten werden benutzerspezifisch gespeichert und sind jederzeit online abrufbar und bietet eine klare, responsive Oberfläche.
 
 ## Funktionen
 
@@ -14,7 +14,7 @@ Eine moderne, vollständige Fullstack-Webapplikation zur Verwaltung persönliche
 * Sicheres Passwort-Hashing mit `bcrypt`
 * Benutzername wird bei Registrierung vergeben und im UI angezeigt
 * Jeder Benutzer sieht ausschließlich seine eigenen Aufgabe
-* Authentifizierung wird clientseitig persistent gespeichert (LocalStorage)
+* Authentifizierung wird clientseitig persistent und in `localStorage` gespeichert
 
 ### ToDo-Management (CRUD)
 
@@ -39,9 +39,9 @@ Eine moderne, vollständige Fullstack-Webapplikation zur Verwaltung persönliche
 
 * Sortieroptionen:
   - Erstellungsdatum (↑/↓)
-  - Deadline (früh/spät)
+  - Deadline (früh oder spät)
   - Status
-  - Text (A–Z / Z–A)
+  - Text (A–Z oder Z–A)
   - Kategorie (A–Z)
 
 * Kategorie-Filter:
@@ -49,16 +49,21 @@ Eine moderne, vollständige Fullstack-Webapplikation zur Verwaltung persönliche
   - Auch benutzerdefinierte Kategorien werden erkannt
   - Jede Kategorie mit eigener Farb-Badge (automatisch generiert)
 
-
-
-
-
----
 ### Pagination und UX
 
 * Maximal 8 Aufgaben pro Seite
-* Keine Scroll-Liste, due Navigation erfolgt über "Weiter" und "Zurück"
-* Modernes, responsives UI mit Tailwind CSS
+* Navigation über `Weiter` und `Zurück`
+* Keine endlosen Scroll-Listen
+* Erledigte Aufgaben werden visuell abgedunkelt
+*	Modernes, schlankes und responsives UI mit Tailwind CSS
+
+### Dark Mode
+
+* Umschaltbar zwischen Light und Dark Mode
+* Einstellung wird dauerhaft in `localStorage` gespeichert
+*	Dark Mode gilt auch auf der Login- und Registrierungsseite
+* Optimierte Farben, Kontraste und Schatten
+
 
 ## Technologiestack
 
@@ -72,40 +77,51 @@ Eine moderne, vollständige Fullstack-Webapplikation zur Verwaltung persönliche
 
 ### Backend
 
-* Node.js + Express
+*	Node.js + Express
 * MongoDB + Mongoose
-* JWT
-* bcryptjs
-* dotenv
-* cors
+*	JWT-Authentifizierung
+*	bcryptjs (Password Hashing)
+*	dotenv
+*	cors
 
 ### Datenbank
 
-* MongoDB (Atlas)
-* Modelle:
+* MongoDB Atlas
+*	Mongoose ODM
+  - `User`: Benutzername, E-Mail, Passwort (gehasht)
+  - `Todo`: Text, Status, Kategorie, Deadline, User-Referenz)
 
-  * `User`: Benutzername, E-Mail, Passwort (gehasht)
-  * `Todo`: Text, Status, Deadline, Kategorie, User-Referenz
 
 ## Architekturübersicht
 
-Die Anwendung ist eine vollständige **Fullstack Client-Server-Webapplikation**.
+Die Anwendung folgt einer klassischen und vollständige Fullstack Client-Server-Architektur.
 
 ```text
-[ Client (React, Browser) ]
-           |
-           |  HTTPS: /api/auth/... /api/todos/... (JWT)
-           v
-[ Server (Node.js + Express) ]
-           |
-           |  Mongoose
-           v
-[ Datenbank (MongoDB / Atlas) ]
+┌─────────────────────────┐
+│     Frontend (React)    │
+│  - Single Page App      │
+│  - Auth per JWT         │
+└────────────┬────────────┘
+             │ HTTPS / JSON
+             ▼
+┌─────────────────────────┐
+│ Backend (Node + Express)│
+│ - REST API              │
+│ - Auth & Business Logic │
+└────────────┬────────────┘
+             │ Mongoose
+             ▼
+┌─────────────────────────┐
+│   MongoDB Atlas Cluster │
+│ - persistent storage    │
+└─────────────────────────┘
+
 ```
 
-* **Client-Schicht:** React SPA, kommuniziert per JSON mit dem Backend
-* **Backend-Schicht:** Express API, Authentifizierung, Business-Logik
-* **Datenhaltung:** MongoDB via Mongoose
+* Presentation Layer (React SPA)
+* Application Layer (Express Controller und Middleware)
+* Data Layer (Mongoose Modelle und Datenbankzugriff)
+
 
 ## Projektstruktur
 
