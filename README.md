@@ -88,8 +88,8 @@ Eine moderne, vollständige Fullstack-Webapplikation zur Verwaltung persönliche
 
 * MongoDB Atlas
 *	Mongoose ODM
-  - `User`: Benutzername, E-Mail, Passwort (gehasht)
-  - `Todo`: Text, Status, Kategorie, Deadline, User-Referenz)
+    - `User`: Benutzername, E-Mail, Passwort (gehasht)
+    - `Todo`: Text, Status, Kategorie, Deadline, User-Referenz)
 
 
 ## Architekturübersicht
@@ -97,24 +97,26 @@ Eine moderne, vollständige Fullstack-Webapplikation zur Verwaltung persönliche
 Die Anwendung folgt einer klassischen und vollständige Fullstack Client-Server-Architektur.
 
 ```text
-┌─────────────────────────┐
-│     Frontend (React)    │
-│  - Single Page App      │
-│  - Auth per JWT         │
-└────────────┬────────────┘
+┌──────────────────────────┐
+│     Frontend (React)     │
+│  - Single Page App       │
+│  - Vite, Tailwind, Axios │
+│  - Auth per JWT          │
+└────────────┬─────────────┘
              │ HTTPS / JSON
              ▼
-┌─────────────────────────┐
-│ Backend (Node + Express)│
-│ - REST API              │
-│ - Auth & Business Logic │
-└────────────┬────────────┘
+┌──────────────────────────┐
+│ Backend (Node + Express) │
+│ - REST API               │
+│ - Express, Auth, JWT     │
+│ - Auth, Business Logic   │
+└────────────┬─────────────┘
              │ Mongoose
              ▼
-┌─────────────────────────┐
-│   MongoDB Atlas Cluster │
-│ - persistent storage    │
-└─────────────────────────┘
+┌──────────────────────────┐
+│   MongoDB Atlas Cluster  │
+│ - persistent storage     │
+└──────────────────────────┘
 
 ```
 
@@ -128,30 +130,60 @@ Die Anwendung folgt einer klassischen und vollständige Fullstack Client-Server-
 ```text
 .
 ├── backend/
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── .env
-│   ├── package.json
-│   └── server.js
+│   ├── middleware/           # Auth Middleware, Error Handling
+│   ├── models/               # User und ToDo Schemas
+│   ├── routes/               # REST API Endpunkte
+│   ├── .env                  # Umgebungsvariablen
+│   ├── package.json          # Projektkonfiguration und Abhängigkeiten
+│   └── server.js             # Haupteinstiegspunkt des Backends.
 │
 └── frontend/
 │   ├── src/
-│   ├── index.html
-│   ├── package.json
-│   ├── vite.config.js
-│   ├── tailwind.config.js
-\   └── postcss.config.js
+│   │   ├── components/       # React Kompinenten
+│   │   ├── App.jsx           # Hauptkomponente der Webappplikation
+│   │   ├── index.css         # Einbindung der Tailwind-Styles
+│   │   ├── main.jsx          # Einstiegspunkt des Clients
+│   ├── index.html            # Einstiegspunkt der React-Anwendung.
+│   ├── package.json          # Projektkonfiguration und Abhängigkeiten
+│   ├── postcss.config.js     # Post-CSS Konfiguration für Tailwind
+│   ├── tailwind.config.js    # Konfiguration für Tailwind
+\   └── vite.config.js        # Konfiguration für Vite
 ```
 
-## Nutzung
 
-Die Webapplikation ist unter dem nachfolgenden Link abrufbar:
+## Deployment und Hosting
+
+* Backend (API):
+  - Hosted auf Render.com
+  - Automatisches Deployment bei jedem GitHub-Push
+  - Environment Variables:
+    - `MONGODB_URI`
+    - `JWT_SECRET`
+    - `PORT`
+
+* Frontend:
+  - Hosted auf Netlify
+  - Build-Prozess mit Vite (npm run build)
+  - Environment Variables:
+    - `VITE_API_URL`
+    - `VITE_AUTH_API_URL`
+
+* CI/CD:
+  - Jedes GitHub-Push löst auto-Deploy auf Render und Netlify aus Zero-Downtime Deployments
+  - Keine lokale Umgebung für Betrieb notwendig und zu 100% Cloud
+
+
+## Live-Demo
+
+Die Webapplikation ist unter folgendem Link erreichbar:
 
 ```
 https://todo-liste-webapp.netlify.app/
 ```
 
-### Hinweis
+**Hinweis:** Der erste Aufruf kann einige Sekunden dauern, da Render das Backend zunächst _aufweckt_.
 
-Der Ladevorgang benötigt beim Starten der Webapplikation etwas Zeit.
+
+## Lizenz
+
+Die Nutzung der Anwendung ist zu Demonstrations- und Lernzwecken erlaubt. Die kommerzielle Nutzung, Weitergabe, Vervielfältigung oder Verbreitung ist untersagt. Siehe LICENSE für Details.
