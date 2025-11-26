@@ -14,27 +14,27 @@ Eine vollständige, moderne Fullstack-Webapplikation zur Verwaltung persönliche
 ### ToDo-Funktionen
 
 * Aufgaben erstellen, anzeigen, bearbeiten und löschen (CRUD)
-* Inline-Editing: Text, Deadline und Kategorie direkt änderbar
+* Inline-Editing: Text, Deadline und Kategorie sind direkt änderbar
 * Speichern per Button oder `Enter`, Abbrechen per `Esc`
 * Pflicht-Deadline (Standard = aktueller Tag)
 * Keine Deadlines in der Vergangenheit
-* Kategorien: Vorauswahl oder eigene Kategorie
+* Kategorien: Vorauswahl oder eigene Kategorie definieren
 
 ### Filtern und Sortieren
 
 * Filter: Alle, Offen, Erledigt, Heute, Diese Woche
 * Sortierung:
 
-  * Erstellungsdatum (neu → alt / alt → neu)
-  * Deadline (früh → spät / spät → früh)
+  * Erstellungsdatum (neu → alt oder alt → neu)
+  * Deadline (früh → spät oder spät → früh)
   * Status (offen → erledigt)
-  * Text (A → Z / Z → A)
+  * Text (A → Z oder Z → A)
   * Kategorie (A → Z)
 
 ### Pagination und UX
 
 * Maximal 8 Aufgaben pro Seite
-* Keine Scroll-Liste – Navigation über "Weiter"/"Zurück"
+* Keine Scroll-Liste, due Navigation erfolgt über "Weiter" und "Zurück"
 * Modernes, responsives UI mit Tailwind CSS
 
 ## Technologiestack
@@ -58,7 +58,7 @@ Eine vollständige, moderne Fullstack-Webapplikation zur Verwaltung persönliche
 
 ### Datenbank
 
-* MongoDB (lokal oder Atlas)
+* MongoDB (Atlas)
 * Modelle:
 
   * `User`: Benutzername, E-Mail, Passwort (gehasht)
@@ -97,12 +97,12 @@ Die Anwendung ist eine vollständige **Fullstack Client-Server-Webapplikation**.
 │   └── routes/
 │
 └── frontend/
-    ├── index.html
-    ├── package.json
-    ├── vite.config.js
-    ├── tailwind.config.js
-    ├── postcss.config.js
-    └── src/
+│   ├── index.html
+│   ├── package.json
+│   ├── vite.config.js
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+\    └── src/
 ```
 
 ## Projekt lokal starten
@@ -142,20 +142,8 @@ Danach Browser öffnen: `http://localhost:5173`
 
 ### Backend auf Render
 
-1. Backend-Repo auf GitHub pushen
-2. Auf Render neuen Web Service anlegen
-3. Root Directory: `backend`
-4. Build Command: `npm install`
-5. Start Command: `npm start`
-6. Environment Variables setzen
-7. Deploy
+...
 
 ### Frontend auf Netlify oder Vercel
 
-1. Frontend-Repo pushen
-2. Projekt importieren
-3. Build Command: `npm run build`
-4. Output Directory: `dist`
-5. `VITE_API_URL` auf Backend-URL setzen
-6. Deploy
-
+...
