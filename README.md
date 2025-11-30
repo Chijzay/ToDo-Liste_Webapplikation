@@ -88,7 +88,7 @@ Diese Webapplikation demonstriert eine vollständig implementierte, moderne Full
 Das integrierte Journal-Modul ermöglicht eine strukturierte Tagesreflexion und bietet produktive sowie wellbeing-orientierte Funktionen:
 
 *	Datumsauswahl per Kalender
-  -	Einträge pro Tag (DD-MM-YYYY)
+  -	Einträge pro Tag (YYYY-MM-DD)
   -	Historische Einträge jederzeit abrufbar
 *	Stimmungstracker
   -	Auswahl von 5 Mood-Leveln (😢 bis 😄)
