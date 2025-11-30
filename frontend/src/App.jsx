@@ -313,7 +313,7 @@ function App() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
           <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-            ToDo & Journal
+            Aufgaben und Journal
           </h1>
           <div className="flex flex-wrap items-center gap-3 text-sm">
             <span className="text-gray-600 dark:text-gray-300">
