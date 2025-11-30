@@ -3,6 +3,7 @@ import axios from 'axios';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 import AuthScreen from './components/AuthScreen';
+import JournalPage from './components/JournalPage';
 
 const API_URL =
   import.meta.env.VITE_API_URL || 'http://localhost:5000/api/todos';
@@ -29,6 +30,10 @@ const SORTS = {
 const PAGE_SIZE = 8;
 
 function App() {
+  const [activePage, setActivePage] = useState(
+    localStorage.getItem('active_page') || 'todos'
+  );
+
   const [todos, setTodos] = useState([]);
   const [filter, setFilter] = useState(FILTERS.ALL);
   const [categoryFilter, setCategoryFilter] = useState('ALL');
@@ -42,6 +47,11 @@ function App() {
   const [page, setPage] = useState(1);
 
   const [darkMode, setDarkMode] = useState(false);
+
+  // aktive Seite speichern
+  useEffect(() => {
+    localStorage.setItem('active_page', activePage);
+  }, [activePage]);
 
   // Theme aus localStorage laden
   useEffect(() => {
@@ -148,7 +158,6 @@ function App() {
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     delete axios.defaults.headers.common['Authorization'];
-    // Filter/Sortierung bleiben bewusst erhalten
   };
 
   const addTodo = async ({ text, dueDate, category }) => {
@@ -196,7 +205,6 @@ function App() {
       const due = todo.dueDate ? new Date(todo.dueDate) : null;
       const refDate = due || created;
 
-      // Status/Zeit-Filter
       switch (filter) {
         case FILTERS.OPEN:
           if (todo.done) return false;
@@ -215,7 +223,6 @@ function App() {
           break;
       }
 
-      // Kategorie-Filter zusätzlich
       if (categoryFilter !== 'ALL') {
         const cat = (todo.category || '').trim();
         if (cat !== categoryFilter) return false;
@@ -271,7 +278,6 @@ function App() {
   const filtered = applyFilter(todos);
   const sorted = applySort(filtered);
 
-  // Alle vorhandenen Kategorien für Dropdown
   const allCategories = Array.from(
     new Set(
       todos
@@ -307,7 +313,7 @@ function App() {
         {/* Header */}
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
           <h1 className="text-2xl font-bold text-slate-900 dark:text-slate-100">
-            ToDo Liste
+            ToDo & Journal
           </h1>
           <div className="flex flex-wrap items-center gap-3 text-sm">
             <span className="text-gray-600 dark:text-gray-300">
@@ -328,134 +334,167 @@ function App() {
           </div>
         </div>
 
-        <TodoForm onAdd={addTodo} />
+        {/* Seiten-Navigation */}
+        <div className="flex gap-2 text-sm">
+          <button
+            type="button"
+            onClick={() => setActivePage('todos')}
+            className={`px-4 py-2 rounded-lg border ${
+              activePage === 'todos'
+                ? 'bg-blue-600 text-white border-blue-600'
+                : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-300 dark:border-slate-600'
+            }`}
+          >
+            ToDo Liste
+          </button>
+          <button
+            type="button"
+            onClick={() => setActivePage('journal')}
+            className={`px-4 py-2 rounded-lg border ${
+              activePage === 'journal'
+                ? 'bg-blue-600 text-white border-blue-600'
+                : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 border-slate-300 dark:border-slate-600'
+            }`}
+          >
+            Journal
+          </button>
+        </div>
 
-        {/* Filter & Sortierung */}
-        <div className="flex flex-wrap gap-3 items-center justify-between text-sm">
-          <div className="flex flex-wrap gap-2">
-            {Object.entries(FILTERS).map(([key, value]) => (
-              <button
-                key={key}
-                onClick={() => {
-                  setFilter(value);
-                  setPage(1);
-                }}
-                className={`px-3 py-1 rounded-full border ${
-                  filter === value
-                    ? 'bg-blue-500 text-white border-blue-500'
-                    : 'bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-600'
-                }`}
-              >
-                {value === FILTERS.OPEN && 'Offen'}
-                {value === FILTERS.DONE && 'Erledigt'}
-                {value === FILTERS.TODAY && 'Heute'}
-                {value === FILTERS.THIS_WEEK && 'Diese Woche'}
-                {value === FILTERS.ALL && 'Alle'}
-              </button>
-            ))}
-          </div>
+        {/* Seiten-Inhalt */}
+        {activePage === 'todos' ? (
+          <>
+            <TodoForm onAdd={addTodo} />
 
-          <div className="flex flex-col items-end gap-2">
-            {/* Kategorie-Filter */}
-            <div className="flex items-center gap-2">
-              <span className="text-gray-600 dark:text-gray-300">
-                Kategorie:
-              </span>
-              <select
-                className="border rounded-lg px-2 py-1 bg-white dark:bg-slate-700 text-gray-800 dark:text-gray-100 border-gray-300 dark:border-slate-600"
-                value={categoryFilter}
-                onChange={(e) => {
-                  setCategoryFilter(e.target.value);
-                  setPage(1);
-                }}
-              >
-                <option value="ALL">Alle</option>
-                {allCategories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
+            {/* Filter & Sortierung */}
+            <div className="flex flex-wrap gap-3 items-center justify-between text-sm">
+              <div className="flex flex-wrap gap-2">
+                {Object.entries(FILTERS).map(([key, value]) => (
+                  <button
+                    key={key}
+                    onClick={() => {
+                      setFilter(value);
+                      setPage(1);
+                    }}
+                    className={`px-3 py-1 rounded-full border ${
+                      filter === value
+                        ? 'bg-blue-500 text-white border-blue-500'
+                        : 'bg-white dark:bg-slate-700 text-gray-700 dark:text-gray-200 border-gray-300 dark:border-slate-600'
+                    }`}
+                  >
+                    {value === FILTERS.OPEN && 'Offen'}
+                    {value === FILTERS.DONE && 'Erledigt'}
+                    {value === FILTERS.TODAY && 'Heute'}
+                    {value === FILTERS.THIS_WEEK && 'Diese Woche'}
+                    {value === FILTERS.ALL && 'Alle'}
+                  </button>
                 ))}
-              </select>
+              </div>
+
+              <div className="flex flex-col items-end gap-2">
+                {/* Kategorie-Filter */}
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-600 dark:text-gray-300">
+                    Kategorie:
+                  </span>
+                  <select
+                    className="border rounded-lg px-2 py-1 bg-white dark:bg-slate-700 text-gray-800 dark:text-gray-100 border-gray-300 dark:border-slate-600"
+                    value={categoryFilter}
+                    onChange={(e) => {
+                      setCategoryFilter(e.target.value);
+                      setPage(1);
+                    }}
+                  >
+                    <option value="ALL">Alle</option>
+                    {allCategories.map((cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Sortierung */}
+                <div className="flex items-center gap-2">
+                  <span className="text-gray-600 dark:text-gray-300">
+                    Sortieren nach:
+                  </span>
+                  <select
+                    className="border rounded-lg px-2 py-1 bg-white dark:bg-slate-700 text-gray-800 dark:text-gray-100 border-gray-300 dark:border-slate-600"
+                    value={sortBy}
+                    onChange={(e) => {
+                      setSortBy(e.target.value);
+                      setPage(1);
+                    }}
+                  >
+                    <option value={SORTS.CREATED_DESC}>
+                      Erstellt (neu → alt)
+                    </option>
+                    <option value={SORTS.CREATED_ASC}>
+                      Erstellt (alt → neu)
+                    </option>
+                    <option value={SORTS.DUE_ASC}>
+                      Deadline (früh → spät)
+                    </option>
+                    <option value={SORTS.DUE_DESC}>
+                      Deadline (spät → früh)
+                    </option>
+                    <option value={SORTS.STATUS}>
+                      Status (offen → erledigt)
+                    </option>
+                    <option value={SORTS.TEXT_ASC}>Text (A → Z)</option>
+                    <option value={SORTS.TEXT_DESC}>Text (Z → A)</option>
+                    <option value={SORTS.CATEGORY_ASC}>
+                      Kategorie (A → Z)
+                    </option>
+                  </select>
+                </div>
+              </div>
             </div>
 
-            {/* Sortierung */}
-            <div className="flex items-center gap-2">
-              <span className="text-gray-600 dark:text-gray-300">
-                Sortieren nach:
+            {/* Liste */}
+            <div className="border rounded-xl p-3 border-slate-200 dark:border-slate-700">
+              <TodoList
+                todos={pagedTodos}
+                onDelete={deleteTodo}
+                onToggle={toggleTodo}
+                onUpdate={updateTodo}
+              />
+            </div>
+
+            {/* Pagination */}
+            <div className="flex justify-between items-center text-sm text-gray-600 dark:text-gray-300">
+              <span>
+                Seite {currentPage} von {totalPages} ({sorted.length} Einträge)
               </span>
-              <select
-                className="border rounded-lg px-2 py-1 bg-white dark:bg-slate-700 text-gray-800 dark:text-gray-100 border-gray-300 dark:border-slate-600"
-                value={sortBy}
-                onChange={(e) => {
-                  setSortBy(e.target.value);
-                  setPage(1);
-                }}
-              >
-                <option value={SORTS.CREATED_DESC}>
-                  Erstellt (neu → alt)
-                </option>
-                <option value={SORTS.CREATED_ASC}>
-                  Erstellt (alt → neu)
-                </option>
-                <option value={SORTS.DUE_ASC}>
-                  Deadline (früh → spät)
-                </option>
-                <option value={SORTS.DUE_DESC}>
-                  Deadline (spät → früh)
-                </option>
-                <option value={SORTS.STATUS}>
-                  Status (offen → erledigt)
-                </option>
-                <option value={SORTS.TEXT_ASC}>Text (A → Z)</option>
-                <option value={SORTS.TEXT_DESC}>Text (Z → A)</option>
-                <option value={SORTS.CATEGORY_ASC}>
-                  Kategorie (A → Z)
-                </option>
-              </select>
+              <div className="flex gap-2">
+                <button
+                  disabled={currentPage === 1}
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  className={`px-3 py-1 rounded-lg border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-200 ${
+                    currentPage === 1
+                      ? 'opacity-40 cursor-not-allowed'
+                      : 'hover:bg-slate-100 dark:hover:bg-slate-700'
+                  }`}
+                >
+                  Zurück
+                </button>
+                <button
+                  disabled={currentPage === totalPages}
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  className={`px-3 py-1 rounded-lg border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-200 ${
+                    currentPage === totalPages
+                      ? 'opacity-40 cursor-not-allowed'
+                      : 'hover:bg-slate-100 dark:hover:bg-slate-700'
+                  }`}
+                >
+                  Weiter
+                </button>
+              </div>
             </div>
-          </div>
-        </div>
-
-        {/* Liste */}
-        <div className="border rounded-xl p-3 border-slate-200 dark:border-slate-700">
-          <TodoList
-            todos={pagedTodos}
-            onDelete={deleteTodo}
-            onToggle={toggleTodo}
-            onUpdate={updateTodo}
-          />
-        </div>
-
-        {/* Pagination */}
-        <div className="flex justify-between items-center text-sm text-gray-600 dark:text-gray-300">
-          <span>
-            Seite {currentPage} von {totalPages} ({sorted.length} Einträge)
-          </span>
-          <div className="flex gap-2">
-            <button
-              disabled={currentPage === 1}
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              className={`px-3 py-1 rounded-lg border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-200 ${
-                currentPage === 1
-                  ? 'opacity-40 cursor-not-allowed'
-                  : 'hover:bg-slate-100 dark:hover:bg-slate-700'
-              }`}
-            >
-              Zurück
-            </button>
-            <button
-              disabled={currentPage === totalPages}
-              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-              className={`px-3 py-1 rounded-lg border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-200 ${
-                currentPage === totalPages
-                  ? 'opacity-40 cursor-not-allowed'
-                  : 'hover:bg-slate-100 dark:hover:bg-slate-700'
-              }`}
-            >
-              Weiter
-            </button>
-          </div>
-        </div>
+          </>
+        ) : (
+          <JournalPage />
+        )}
       </div>
     </div>
   );
