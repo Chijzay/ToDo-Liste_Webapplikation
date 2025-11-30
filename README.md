@@ -24,6 +24,10 @@ Diese Webapplikation demonstriert eine vollständig implementierte, moderne Full
 * Verwaltung persönlicher Aufgaben
 * Deadlines und Kategorien
 * Vollständige Filter- und Sortieroptionen
+* Stimmungs- und Wassertracker
+* Dankbarkeitsliste
+* Tagesprioritäten
+* Tagebucheintrag
 * Light und Dark Mode (persistiert)
 * Pagination (keine Scroll-Listen)
 * Sichere und skalierbare API-Struktur
